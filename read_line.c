@@ -10,6 +10,7 @@ char *read_line(void)
 	char *input = NULL;
 	size_t bufsize = 0;
 
-	get_line(&input, &bufsize, stdin);
+	getline(&input, &bufsize, stdin);
+
 	return (input);
 }

@@ -16,10 +16,17 @@ void shell_loop(void)
 	{
 		write(STDOUT_FILENO, "^-^ ", 4);
 		input = read_line();
-		args = split_line(input);
-		status = exec_line(args, input);
-
-		free(input);
-		free(args);
+		if (input[0] != '\0')
+		{
+			args = split_line(input);
+			status = exec_line(args, input);
+			free(input);
+			free(args);
+		}
+		else
+		{
+			write(STDOUT_FILENO, "\n", 1);
+			status = 0;
+		}
 	}
 }
