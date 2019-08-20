@@ -25,7 +25,7 @@ void shell_loop(void)
 		}
 		else
 		{
-			write(STDOUT_FILENO, "\n", 1);
+			free(input);
 			status = 0;
 		}
 	}

@@ -65,11 +65,10 @@ int cmd_exec(char **args, char *input)
 
 		if (dir != NULL)
 			execve(dir, args, NULL);
-
-		perror("lsh: not found");
-		free(dir);
 		free(input);
 		free(args);
+		perror("lsh: not found");
+		free(dir);
 		exit(EXIT_FAILURE);
 	}
 	else if (pd < 0)
