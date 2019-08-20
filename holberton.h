@@ -98,4 +98,7 @@ char *error_permission(char **args);
 /* get_error.c */
 int get_error(char **args, int eval);
 
+/* get_sigint.c */
+void get_sigint(int sig);
+
 #endif

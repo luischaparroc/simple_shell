@@ -14,6 +14,7 @@ int main(int ac, char **av)
 	(void) ac;
 	(void) av;
 
+	signal(SIGINT, get_sigint);
 	shell_loop();
 	return (0);
 }
