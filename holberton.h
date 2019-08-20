@@ -74,6 +74,10 @@ int cmd_exec(char **args, char *input);
 char *_getenv(const char *name);
 int _env(char **args);
 
+/* env2.c */
+/*int _setenv(char *name, char *value, int overwrite);*/
+/*int stenv(char **args);*/
+
 /* get_builtin */
 int (*get_builtin(char *cmd))(char **args);
 

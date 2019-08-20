@@ -18,7 +18,7 @@ int (*get_builtin(char *cmd))(char **args)
 
 	for (i = 0; builtin[i].name; i++)
 	{
-		if (_strcmp(cmd, builtin[i].name) == 0)
+		if (_strcmp(builtin[i].name, cmd) == 0)
 			break;
 	}
 

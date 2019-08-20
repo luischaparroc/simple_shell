@@ -9,5 +9,6 @@
 int exit_shell(char **args)
 {
 	(void) args;
+
 	return (0);
 }
