@@ -7,24 +7,20 @@
  *
  */
 
-int (*get_builtin(char *cmd))(char **args))
+int (*get_builtin(char *cmd))(char **args)
 {
-	builtin_t args[] = {
-		{ "cd", get_cd },
-		{ "env", get_env },
-		{ "setenv", get_setenv },
-		{ "unsetenv", get_unsetenv },
-		{ "exit", get_exit },
-		{ "alias", get_alias },
-		{ "help", get_help },
+	builtin_t builtin[] = {
+		{ "env", _env },
+		{ "exit", exit_shell },
 		{ NULL, NULL }
 	};
 	int i;
 
-	for (i = 0; args[i].name; i++)
+	for (i = 0; builtin[i].name; i++)
 	{
-		if (_strcmp(args[i].name, command) == 0)
+		if (_strcmp(cmd, builtin[i].name) == 0)
 			break;
 	}
-	return (args[i].f)
+
+	return (builtin[i].f);
 }
