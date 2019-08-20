@@ -73,4 +73,7 @@ int (*get_builtin(char *cmd))(char **args);
 /* _exit.c */
 int exit_shell(char **args);
 
+/* cmd_exec.c */
+int cmd_exec(char **args);
+
 #endif
