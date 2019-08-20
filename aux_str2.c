@@ -42,7 +42,7 @@ int _strlen(const char *s)
  */
 int cmp_chars(char str[], const char *delim)
 {
-	unsigned int i, j, k, bool;
+	unsigned int i, j, k;
 
 	for (i = 0, k = 0; str[i]; i++)
 	{

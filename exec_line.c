@@ -18,5 +18,5 @@ int exec_line(char **args)
 	if (builtin != NULL)
 		return (builtin(args));
 
-	return (1);
+	return (cmd_exec(args));
 }

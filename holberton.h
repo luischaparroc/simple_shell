@@ -11,12 +11,15 @@
 #include <fcntl.h>
 #include <signal.h>
 
-#define BUFSIZE 1024
+#define BUFSIZE 2
 #define TOK_BUFSIZE 2
 #define TOK_DELIM " \t\r\n\a"
 
 /* Points to an array of pointers to strings called the "environment" */
 extern char **environ;
+
+/* global char variable for handle errors */
+char *prgname;
 
 /**
  * struct builtin_s - Builtin struct for command args.
@@ -73,7 +76,22 @@ int (*get_builtin(char *cmd))(char **args);
 /* _exit.c */
 int exit_shell(char **args);
 
-/* cmd_exec.c */
-int cmd_exec(char **args);
+/* aux_stdlib.c */
+int get_len(int n);
+char *aux_itoa(int n);
+
+/* aux_error1.c */
+char *error_get_cd(char **args);
+char *error_not_found(char **args);
+char *error_exit_shell(char **args);
+
+/* aux_error2.c */
+char *error_get_alias(char **args);
+char *error_env(char **args);
+char *error_syntax(char **args);
+char *error_permission(char **args);
+
+/* get_error.c */
+int get_error(char **args, int eval);
 
 #endif

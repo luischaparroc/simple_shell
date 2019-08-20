@@ -70,7 +70,7 @@ void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
 char **_reallocdp(char **ptr, unsigned int old_size, unsigned int new_size)
 {
 	char **newptr;
-	int i;
+	unsigned int i;
 
 	if (ptr == NULL)
 		return (malloc(sizeof(char *) * new_size));

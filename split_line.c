@@ -9,7 +9,7 @@
 char **split_line(char *input)
 {
 	size_t bsize;
-	int i;
+	size_t i;
 	char **tokens;
 	char *token;
 
