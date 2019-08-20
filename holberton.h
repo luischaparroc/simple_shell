@@ -11,8 +11,8 @@
 #include <fcntl.h>
 #include <signal.h>
 
-#define BUFSIZE 2
-#define TOK_BUFSIZE 2
+#define BUFSIZE 1024
+#define TOK_BUFSIZE 128
 #define TOK_DELIM " \t\r\n\a"
 
 /* Points to an array of pointers to strings called the "environment" */
@@ -64,7 +64,11 @@ void bring_line(char **lineptr, size_t *n, char *buffer, size_t j);
 ssize_t get_line(char **lineptr, size_t *n, FILE *stream);
 
 /* exec_line */
-int exec_line(char **args);
+int exec_line(char **args, char *input);
+
+/* cmd_exec.c */
+char *_which(char *cmd);
+int cmd_exec(char **args, char *input);
 
 /* env1.c */
 char *_getenv(const char *name);

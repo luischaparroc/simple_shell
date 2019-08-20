@@ -4,9 +4,10 @@
  * exec_line - finds builtins and commands
  *
  * @args: arguments
+ * @input: input arguments
  * Return: 1 on success.
  */
-int exec_line(char **args)
+int exec_line(char **args, char *input)
 {
 	int (*builtin)(char **args);
 
@@ -18,5 +19,5 @@ int exec_line(char **args)
 	if (builtin != NULL)
 		return (builtin(args));
 
-	return (cmd_exec(args));
+	return (cmd_exec(args, input));
 }

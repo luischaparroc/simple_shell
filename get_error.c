@@ -20,6 +20,7 @@ int get_error(char **args, int eval)
 		break;
 	case 3:
 		error = error_permission(args);
+		break;
 	case 4:
 		error = error_not_found(args);
 		break;

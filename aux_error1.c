@@ -7,7 +7,7 @@
  */
 char *error_get_cd(char **args)
 {
-	int count;
+	int count = 0;
 	int length;
 	char *error;
 	char *ver_str;
@@ -44,7 +44,7 @@ char *error_get_cd(char **args)
  */
 char *error_not_found(char **args)
 {
-	int count;
+	int count = 0;
 	int length;
 	char *error;
 	char *ver_str;
@@ -75,7 +75,7 @@ char *error_not_found(char **args)
  */
 char *error_exit_shell(char **args)
 {
-	int count;
+	int count = 0;
 	int lenght;
 	char *error;
 	char *ver_str;

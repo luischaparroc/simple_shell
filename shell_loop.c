@@ -17,7 +17,7 @@ void shell_loop(void)
 		write(STDOUT_FILENO, "^-^ ", 4);
 		input = read_line();
 		args = split_line(input);
-		status = exec_line(args);
+		status = exec_line(args, input);
 
 		free(input);
 		free(args);

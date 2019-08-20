@@ -28,7 +28,7 @@ char *error_get_alias(char **args)
  */
 char *error_env(char **args)
 {
-	int count;
+	int count = 0;
 	int length;
 	char *error;
 	char *ver_str;
@@ -59,7 +59,7 @@ char *error_env(char **args)
  */
 char *error_syntax(char **args)
 {
-	int count;
+	int count = 0;
 	int lenght;
 	char *error;
 	char *ver_str;
@@ -90,7 +90,7 @@ char *error_syntax(char **args)
  */
 char *error_permission(char **args)
 {
-	int count;
+	int count = 0;
 	int length;
 	char *error;
 	char *ver_str;
