@@ -65,9 +65,8 @@ int cmd_exec(char **args, char *input)
 
 		if (dir != NULL)
 			execve(dir, args, NULL);
-		else
-			perror("lsh");
 
+		perror("lsh");
 		free(dir);
 		free(input);
 		free(args);
