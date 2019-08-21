@@ -15,10 +15,10 @@ char *_which(char *cmd)
 	if (cmd == NULL)
 		return (NULL);
 
-	if (stat(cmd, &st) == 0)
-		return (cmd);
-
 	path = _getenv("PATH");
+	if (path[0] == ':')
+		if (stat(cmd, &st) == 0)
+			return (cmd);
 	ptr_path = _strdup(path);
 	len_cmd = _strlen(cmd);
 	token_path = _strtok(ptr_path, ":");
@@ -39,6 +39,10 @@ char *_which(char *cmd)
 		token_path = _strtok(NULL, ":");
 	}
 	free(ptr_path);
+
+	if (stat(cmd, &st) == 0)
+		return (cmd);
+
 	return (NULL);
 }
 
@@ -65,10 +69,11 @@ int cmd_exec(char **args, char *input)
 
 		if (dir != NULL)
 			execve(dir, args, NULL);
-		free(input);
-		free(args);
+
 		perror("lsh: not found");
 		free(dir);
+		free(input);
+		free(args);
 		exit(EXIT_FAILURE);
 	}
 	else if (pd < 0)
