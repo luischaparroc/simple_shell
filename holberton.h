@@ -67,9 +67,9 @@ ssize_t get_line(char **lineptr, size_t *n, FILE *stream);
 int exec_line(char **args, char *input);
 
 /* cmd_exec.c */
+int is_cdir(char *path, int *i);
 char *_which(char *cmd);
 int cmd_exec(char **args, char *input);
-int is_cdir(char *path, int *i);
 
 /* env1.c */
 char *_getenv(const char *name);
