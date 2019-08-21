@@ -1,5 +1,20 @@
 #include "holberton.h"
 
+int is_cdir(char *path, int *i)
+{
+	if (path[*i] == ':')
+		return (1);
+
+	while (path[*i] != ':')
+	{
+		*i += 1;
+	}
+
+	*i += 1;
+
+	return (0);
+}
+
 /**
  * _which - locates a command
  *
@@ -9,22 +24,24 @@
 char *_which(char *cmd)
 {
 	char *path, *ptr_path, *token_path, *dir;
-	int len_dir, len_cmd;
+	int len_dir, len_cmd, i;
 	struct stat st;
 
 	if (cmd == NULL)
 		return (NULL);
 
 	path = _getenv("PATH");
-	if (path[0] == ':')
-		if (stat(cmd, &st) == 0)
-			return (cmd);
 	ptr_path = _strdup(path);
 	len_cmd = _strlen(cmd);
 	token_path = _strtok(ptr_path, ":");
+	i = 0;
 
 	while (token_path != NULL)
 	{
+		if (is_cdir(path, &i))
+			if (stat(cmd, &st) == 0)
+				return (cmd);
+
 		len_dir = _strlen(token_path);
 		dir = malloc(len_dir + len_cmd + 2);
 		_strcpy(dir, token_path);

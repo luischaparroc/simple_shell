@@ -14,7 +14,7 @@ void shell_loop(void)
 	status = 1;
 	while (status)
 	{
-		write(STDOUT_FILENO, "^-^ ", 4);
+		write(STDIN_FILENO, "^-^ ", 4);
 		input = read_line();
 		if (input[0] != '\0')
 		{
