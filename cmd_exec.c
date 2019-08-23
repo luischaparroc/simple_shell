@@ -26,9 +26,10 @@ int is_cdir(char *path, int *i)
  * _which - locates a command
  *
  * @cmd: command name
+ * @_environ: environment variable
  * Return: location of the command.
  */
-char *_which(char *cmd)
+char *_which(char *cmd, char **_environ)
 {
 	char *path, *ptr_path, *token_path, *dir;
 	int len_dir, len_cmd, i;
@@ -37,7 +38,7 @@ char *_which(char *cmd)
 	if (cmd == NULL)
 		return (NULL);
 
-	path = _getenv("PATH");
+	path = _getenv("PATH", _environ);
 	ptr_path = _strdup(path);
 	len_cmd = _strlen(cmd);
 	token_path = _strtok(ptr_path, ":");
@@ -85,20 +86,21 @@ int cmd_exec(data_shell *datash)
 	char *dir;
 	(void) wpd;
 
-	dir = _which(datash->args[0]);
+	dir = _which(datash->args[0], datash->_environ);
 	if (dir == NULL)
 	{
 		get_error(datash, 127);
 		return (1);
-   	}
+	}
+
 	if (_strcmp(datash->args[0], dir) != 0)
 		free(dir);
 	pd = fork();
 
 	if (pd == 0)
 	{
-		dir = _which(datash->args[0]);
-       		execve(dir, datash->args, NULL);
+		dir = _which(datash->args[0], datash->_environ);
+		execve(dir, datash->args, NULL);
 		free(dir);
 		free(datash->input);
 		free(datash->args);

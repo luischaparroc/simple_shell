@@ -37,10 +37,11 @@ char *error_get_cd(char **args)
 	free(ver_str);
 	return (error);
 }
+
 /**
  * error_not_found - generic error message for command not found
- * @args: type array of args that is passed to the command.
- * Return: Error
+ * @datash: data relevant (counter, arguments)
+ * Return: Error message
  */
 char *error_not_found(data_shell *datash)
 {
@@ -48,8 +49,7 @@ char *error_not_found(data_shell *datash)
 	char *error;
 	char *ver_str;
 
-	datash->c_error += 1;
-	ver_str = aux_itoa(datash->c_error);
+	ver_str = aux_itoa(datash->counter);
 	length = _strlen(datash->av[0]) + _strlen(ver_str);
 	length += _strlen(datash->args[0]) + 16;
 	error = malloc(sizeof(char) * (length + 1));
@@ -69,10 +69,12 @@ char *error_not_found(data_shell *datash)
 	free(ver_str);
 	return (error);
 }
+
 /**
  * error_exit_shell - generic error message for exit in get_exit
- * @args: type array of args that is passed to the command.
- * Return: Error
+ * @datash: data relevant (counter, arguments)
+ *
+ * Return: Error message
  */
 char *error_exit_shell(data_shell *datash)
 {
@@ -80,10 +82,9 @@ char *error_exit_shell(data_shell *datash)
 	char *error;
 	char *ver_str;
 
-	datash->c_error += 1;
-	ver_str = aux_itoa(datash->c_error);
+	ver_str = aux_itoa(datash->counter);
 	length = _strlen(datash->av[0]) + _strlen(ver_str);
-        length += _strlen(datash->args[0]) + _strlen(datash->args[1]) + 23;
+	length += _strlen(datash->args[0]) + _strlen(datash->args[1]) + 23;
 	error = malloc(sizeof(char) * (length + 1));
 	if (error == 0)
 	{
@@ -99,5 +100,6 @@ char *error_exit_shell(data_shell *datash)
 	_strcat(error, datash->args[1]);
 	_strcat(error, "\n\0");
 	free(ver_str);
+
 	return (error);
 }

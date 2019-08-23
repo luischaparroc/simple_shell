@@ -27,7 +27,8 @@ char *prgname;
  * @input: command line written by the user
  * @args: tokens of the command line
  * @status: last status of the shell
- * @c_error: error counter
+ * @counter: lines counter
+ * @_environ: environment variable
  */
 typedef struct data
 {
@@ -35,7 +36,8 @@ typedef struct data
 	char *input;
 	char **args;
 	int status;
-	int c_error;
+	int counter;
+	char **_environ;
 } data_shell;
 
 /**
@@ -66,6 +68,7 @@ char *_strdup(const char *s);
 int _strlen(const char *s);
 int cmp_chars(char str[], const char *delim);
 char *_strtok(char str[], const char *delim);
+int _isdigit(const char *s);
 
 /* shell_loop.c */
 void shell_loop(data_shell *datash);
@@ -85,16 +88,16 @@ int exec_line(data_shell *datash);
 
 /* cmd_exec.c */
 int is_cdir(char *path, int *i);
-char *_which(char *cmd);
+char *_which(char *cmd, char **_environ);
 int cmd_exec(data_shell *datash);
 
 /* env1.c */
-char *_getenv(const char *name);
+char *_getenv(const char *name, char **_environ);
 int _env(data_shell *datash);
 
 /* env2.c */
-/*int _setenv(char *name, char *value, int overwrite);*/
-/*int stenv(char **args);*/
+char *copy_info(char *name, char *value);
+int _setenv(data_shell *datash);
 
 /* get_builtin */
 int (*get_builtin(char *cmd))(data_shell *datash);
@@ -114,7 +117,7 @@ char *error_exit_shell(data_shell *datash);
 
 /* aux_error2.c */
 char *error_get_alias(char **args);
-char *error_env(char **args);
+char *error_env(data_shell *datash);
 char *error_syntax(char **args);
 char *error_permission(char **args);
 

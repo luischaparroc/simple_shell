@@ -18,6 +18,7 @@ void shell_loop(data_shell *datash)
 		if (datash->input[0] != '\0')
 		{
 			datash->args = split_line(datash->input);
+			datash->counter += 1;
 			loop = exec_line(datash);
 			free(datash->input);
 			free(datash->args);

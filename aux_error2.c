@@ -23,33 +23,37 @@ char *error_get_alias(char **args)
 }
 /**
  * error_env - error message for env in get_env.
- * @args: type aray of args that is passed to the command.
- * Return: error.
+ * @datash: data relevant (counter, arguments)
+ * Return: error message.
  */
-char *error_env(char **args)
+char *error_env(data_shell *datash)
 {
-	int count = 0;
 	int length;
 	char *error;
 	char *ver_str;
+	char *msg;
 
-	ver_str = aux_itoa(count);
-	if (ver_str == 0)
-		return (NULL);
-	length = _strlen(prgname) + _strlen(ver_str) + _strlen(args[0]) + 32;
+	ver_str = aux_itoa(datash->counter);
+	msg = ": Unable to add/remove from environment\n";
+	length = _strlen(datash->av[0]) + _strlen(ver_str);
+	length += _strlen(datash->args[0]) + _strlen(msg) + 4;
 	error = malloc(sizeof(char) * (length + 1));
 	if (error == 0)
 	{
+		free(error);
 		free(ver_str);
 		return (NULL);
 	}
-	_strcpy(error, prgname);
+
+	_strcpy(error, datash->av[0]);
 	_strcat(error, ": ");
 	_strcat(error, ver_str);
 	_strcat(error, ": ");
-	_strcat(error, args[0]);
-	_strcat(error, ": unable to locate env file\n");
+	_strcat(error, datash->args[0]);
+	_strcat(error, msg);
+	_strcat(error, "\0");
 	free(ver_str);
+
 	return (error);
 }
 /**
