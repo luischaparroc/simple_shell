@@ -6,36 +6,35 @@
  * @eval: error value
  * Return: error
  */
-int get_error(char **args, int eval)
+int get_error(data_shell *datash, int eval)
 {
 	char *error;
+	char **args = NULL;
 
 	switch (eval)
 	{
-	case 1:
+	case -1:
 		error = error_get_alias(args);
 		break;
-	case 2:
+	case 1:
 		error = error_env(args);
 		break;
-	case 3:
+	case 126:
 		error = error_permission(args);
 		break;
-	case 4:
-		error = error_not_found(args);
+	case 127:
+		error = error_not_found(datash);
 		break;
-	case 5:
-		error = error_get_cd(args);
+	case 2:
+		error = error_exit_shell(datash);
 		break;
-	case 6:
-		error = error_syntax(args);
-		break;
-	case 7:
-		error = error_exit_shell(args);
-		break;
+
 	}
-	write(STDERR_FILENO, error, _strlen(error));
 	if (error)
+	{
+		write(STDERR_FILENO, error, _strlen(error));
 		free(error);
+	}
+	datash->status = eval;
 	return (eval);
 }

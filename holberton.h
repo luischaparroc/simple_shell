@@ -10,6 +10,7 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <signal.h>
+#include <limits.h>
 
 #define BUFSIZE 1024
 #define TOK_BUFSIZE 128
@@ -18,8 +19,24 @@
 /* Points to an array of pointers to strings called the "environment" */
 extern char **environ;
 
-/* global char variable for handle errors */
 char *prgname;
+
+/**
+ * struct data - struct that contains all relevant data on runtime
+ * @av: argument vector
+ * @input: command line written by the user
+ * @args: tokens of the command line
+ * @status: last status of the shell
+ * @c_error: error counter
+ */
+typedef struct data
+{
+	char **av;
+	char *input;
+	char **args;
+	int status;
+	int c_error;
+} data_shell;
 
 /**
  * struct builtin_s - Builtin struct for command args.
@@ -29,7 +46,7 @@ char *prgname;
 typedef struct builtin_s
 {
 	char *name;
-	int (*f)(char **argv);
+	int (*f)(data_shell *datash);
 } builtin_t;
 
 /* aux_str functions */
@@ -51,7 +68,7 @@ int cmp_chars(char str[], const char *delim);
 char *_strtok(char str[], const char *delim);
 
 /* shell_loop.c */
-void shell_loop(void);
+void shell_loop(data_shell *datash);
 
 /* read_line.c */
 char *read_line(void);
@@ -64,35 +81,36 @@ void bring_line(char **lineptr, size_t *n, char *buffer, size_t j);
 ssize_t get_line(char **lineptr, size_t *n, FILE *stream);
 
 /* exec_line */
-int exec_line(char **args, char *input);
+int exec_line(data_shell *datash);
 
 /* cmd_exec.c */
 int is_cdir(char *path, int *i);
 char *_which(char *cmd);
-int cmd_exec(char **args, char *input);
+int cmd_exec(data_shell *datash);
 
 /* env1.c */
 char *_getenv(const char *name);
-int _env(char **args);
+int _env(data_shell *datash);
 
 /* env2.c */
 /*int _setenv(char *name, char *value, int overwrite);*/
 /*int stenv(char **args);*/
 
 /* get_builtin */
-int (*get_builtin(char *cmd))(char **args);
+int (*get_builtin(char *cmd))(data_shell *datash);
 
 /* _exit.c */
-int exit_shell(char **args);
+int exit_shell(data_shell *datash);
 
 /* aux_stdlib.c */
 int get_len(int n);
 char *aux_itoa(int n);
+int _atoi(char *s);
 
 /* aux_error1.c */
 char *error_get_cd(char **args);
-char *error_not_found(char **args);
-char *error_exit_shell(char **args);
+char *error_not_found(data_shell *datash);
+char *error_exit_shell(data_shell *datash);
 
 /* aux_error2.c */
 char *error_get_alias(char **args);
@@ -101,11 +119,19 @@ char *error_syntax(char **args);
 char *error_permission(char **args);
 
 /* get_error.c */
-int get_error(char **args, int eval);
+int get_error(data_shell *datash, int eval);
 
 /* get_sigint.c */
 void get_sigint(int sig);
 
+/* aux_help.c */
+
+void aux_help_env(void);
+void aux_help_gen(void);
+void aux_help_exit(void);
+
+/* get_help.c */
+int get_help(char **args);
 
 
 #endif

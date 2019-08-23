@@ -56,8 +56,10 @@ char *_which(char *cmd)
 		_strcat(dir, "\0");
 
 		if (stat(dir, &st) == 0)
+		{
+			free(ptr_path);
 			return (dir);
-
+		}
 		free(dir);
 		token_path = _strtok(NULL, ":");
 	}
@@ -72,38 +74,41 @@ char *_which(char *cmd)
 /**
  * cmd_exec - executes command lines
  *
- * @args: arguments
- * @input: input arguments
+ * @datash: data relevant (args and input)
  * Return: 1 on success.
  */
-int cmd_exec(char **args, char *input)
+int cmd_exec(data_shell *datash)
 {
 	pid_t pd;
 	pid_t wpd;
 	int state;
 	char *dir;
-
 	(void) wpd;
+
+	dir = _which(datash->args[0]);
+	if (dir == NULL)
+	{
+		get_error(datash, 127);
+		return (1);
+   	}
+	if (_strcmp(datash->args[0], dir) != 0)
+		free(dir);
 	pd = fork();
 
 	if (pd == 0)
 	{
-		dir = _which(args[0]);
-
-		if (dir != NULL)
-			execve(dir, args, NULL);
-
-		perror("lsh: not found");
+		dir = _which(datash->args[0]);
+       		execve(dir, datash->args, NULL);
 		free(dir);
-		free(input);
-		free(args);
+		free(datash->input);
+		free(datash->args);
 		exit(EXIT_FAILURE);
 	}
 	else if (pd < 0)
 	{
-		free(input);
-		free(args);
-		perror("lsh");
+		free(datash->input);
+		free(datash->args);
+		perror(datash->av[0]);
 	}
 	else
 	{
@@ -111,6 +116,6 @@ int cmd_exec(char **args, char *input)
 			wpd = waitpid(pd, &state, WUNTRACED);
 		} while (!WIFEXITED(state) && !WIFSIGNALED(state));
 	}
-
+	datash->status = 0;
 	return (1);
 }

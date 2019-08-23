@@ -60,15 +60,15 @@ char *error_env(char **args)
 char *error_syntax(char **args)
 {
 	int count = 0;
-	int lenght;
+	int length;
 	char *error;
 	char *ver_str;
 
 	ver_str = aux_itoa(count);
 	if (ver_str == 0)
 		return (NULL);
-	lenght = _strlen(prgname) + _strlen(ver_str) + _strlen(args[0]) + 32;
-	error = malloc(sizeof(char) * (lenght + 1));
+	length = _strlen(prgname) + _strlen(ver_str) + _strlen(args[0]) + 32;
+	error = malloc(sizeof(char) * (length + 1));
 	if (error == 0)
 	{
 		free(ver_str);
@@ -98,7 +98,7 @@ char *error_permission(char **args)
 	ver_str = aux_itoa(count);
 	if (ver_str == 0)
 		return (NULL);
-	length = _strlen(prgname) + _strlen(ver_str) + _strlen(args[0]) + 27;
+	length = _strlen(prgname) + _strlen(ver_str) + _strlen(args[0]) + 24;
 	error = malloc(sizeof(char) * (length + 1));
 	if (error == 0)
 	{
@@ -110,7 +110,7 @@ char *error_permission(char **args)
 	_strcat(error, ver_str);
 	_strcat(error, ": ");
 	_strcat(error, args[0]);
-	_strcat(error, ": permission not found\n");
+	_strcat(error, ": permission denied\n");
 	free(ver_str);
 	return (error);
 }

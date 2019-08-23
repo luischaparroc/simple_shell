@@ -2,31 +2,30 @@
 
 /**
  * shell_loop - Loop of shell
+ * @datash: data relevant (av, input, args)
  *
  * Return: no return.
  */
-void shell_loop(void)
+void shell_loop(data_shell *datash)
 {
-	char *input;
-	char **args;
-	int status;
+	int loop;
 
-	status = 1;
-	while (status)
+	loop = 1;
+	while (loop == 1)
 	{
 		write(STDIN_FILENO, "^-^ ", 4);
-		input = read_line();
-		if (input[0] != '\0')
+		datash->input = read_line();
+		if (datash->input[0] != '\0')
 		{
-			args = split_line(input);
-			status = exec_line(args, input);
-			free(input);
-			free(args);
+			datash->args = split_line(datash->input);
+			loop = exec_line(datash);
+			free(datash->input);
+			free(datash->args);
 		}
 		else
 		{
-			free(input);
-			status = 0;
+			loop = 0;
+			free(datash->input);
 		}
 	}
 }

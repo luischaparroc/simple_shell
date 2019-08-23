@@ -57,13 +57,13 @@ char *_getenv(const char *name)
 /**
  * _env - prints the evironment variables
  *
- * @args: arguments.
+ * @datash: data relevant.
  * Return: 1 on success.
  */
-int _env(char **args)
+int _env(data_shell *datash)
 {
 	int i, j;
-	(void) args;
+	(void) datash;
 
 	for (i = 0; environ[i]; i++)
 	{

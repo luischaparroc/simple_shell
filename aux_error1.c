@@ -42,29 +42,30 @@ char *error_get_cd(char **args)
  * @args: type array of args that is passed to the command.
  * Return: Error
  */
-char *error_not_found(char **args)
+char *error_not_found(data_shell *datash)
 {
-	int count = 0;
 	int length;
 	char *error;
 	char *ver_str;
 
-	ver_str = aux_itoa(count);
-	if (ver_str == 0)
-		return (NULL);
-	length = _strlen(prgname) + _strlen(ver_str) + _strlen(args[0]) + 16;
+	datash->c_error += 1;
+	ver_str = aux_itoa(datash->c_error);
+	length = _strlen(datash->av[0]) + _strlen(ver_str);
+	length += _strlen(datash->args[0]) + 16;
 	error = malloc(sizeof(char) * (length + 1));
 	if (error == 0)
 	{
+		free(error);
 		free(ver_str);
 		return (NULL);
 	}
-	_strcpy(error, prgname);
+	_strcpy(error, datash->av[0]);
 	_strcat(error, ": ");
 	_strcat(error, ver_str);
 	_strcat(error, ": ");
-	_strcat(error, args[0]);
+	_strcat(error, datash->args[0]);
 	_strcat(error, ": not found\n");
+	_strcat(error, "\0");
 	free(ver_str);
 	return (error);
 }
@@ -73,29 +74,30 @@ char *error_not_found(char **args)
  * @args: type array of args that is passed to the command.
  * Return: Error
  */
-char *error_exit_shell(char **args)
+char *error_exit_shell(data_shell *datash)
 {
-	int count = 0;
-	int lenght;
+	int length;
 	char *error;
 	char *ver_str;
 
-	ver_str = aux_itoa(count);
-	if (ver_str == 0)
-		return (NULL);
-	lenght = _strlen(prgname) + _strlen(ver_str) + _strlen(args[0]) + 30;
-	error = malloc(sizeof(char) * (lenght + 1));
+	datash->c_error += 1;
+	ver_str = aux_itoa(datash->c_error);
+	length = _strlen(datash->av[0]) + _strlen(ver_str);
+        length += _strlen(datash->args[0]) + _strlen(datash->args[1]) + 23;
+	error = malloc(sizeof(char) * (length + 1));
 	if (error == 0)
 	{
 		free(ver_str);
 		return (NULL);
 	}
-	_strcpy(error, prgname);
+	_strcpy(error, datash->av[0]);
 	_strcat(error, ": ");
 	_strcat(error, ver_str);
-	_strcat(error, ": command failed to execute");
-	_strcat(error, args[0]);
-	_strcat(error, "\n");
+	_strcat(error, ": ");
+	_strcat(error, datash->args[0]);
+	_strcat(error, ": Illegal number: ");
+	_strcat(error, datash->args[1]);
+	_strcat(error, "\n\0");
 	free(ver_str);
 	return (error);
 }
