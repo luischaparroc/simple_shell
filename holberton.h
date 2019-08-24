@@ -146,11 +146,19 @@ void get_sigint(int sig);
 /* aux_help.c */
 
 void aux_help_env(void);
-void aux_help_gen(void);
+void aux_help_setenv(void);
+void aux_help_unsetenv(void);
+void aux_help_general(void);
 void aux_help_exit(void);
 
+/* aux_help2.c */
+
+void aux_help(void);
+void aux_help_alias(void);
+void aux_help_cd(void);
+
 /* get_help.c */
-int get_help(char **args);
+int get_help(data_shell *datash);
 
 
 #endif

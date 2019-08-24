@@ -5,17 +5,58 @@
  */
 void aux_help_env(void)
 {
-	char *help = "_env: env builtin\n Print the enviroment of the shell.\n";
+	char *help = "env: env [option] [name=value] [command [args]]\n\t";
 
+	write(STDOUT_FILENO, help, _strlen(help));
+	help = "Print the enviroment of the shell.\n";
+	write(STDOUT_FILENO, help, _strlen(help));
+
+}
+/**
+ * aux_help_setenv - Help information for the builtin setenv
+ */
+void aux_help_setenv(void)
+{
+
+	char *help = "setenv: setenv (const char *name, const char *value,";
+
+	write(STDOUT_FILENO, help, _strlen(help));
+	help = "int replace)\n\t";
+	write(STDOUT_FILENO, help, _strlen(help));
+	help = "Add a new definition to the environment";
 	write(STDOUT_FILENO, help, _strlen(help));
 }
 /**
- * aux_help_gen - Generic help information for the help builtin
+ * aux_help_unsetenv - Help information for the builtin unsetenv
  */
-void aux_help_gen(void)
+void aux_help_unsetenv(void)
 {
-	char *help = "_help: help builtin\n Print the generic from shell.\n";
+	char *help = "unsetenv: unsetenv (const char *name)\n\t";
 
+	write(STDOUT_FILENO, help, _strlen(help));
+	help = "Remove an entry completely from the environment";
+}
+
+
+/**
+ * aux_help_general - Entry point for help information for the help builtin
+ */
+void aux_help_general(void)
+{
+	char *help = "^-^ bash, version 1.0(1)-release\n";
+
+	write(STDOUT_FILENO, help, _strlen(help));
+	help = "These commands are defined internally.Type 'help' to see the list";
+	write(STDOUT_FILENO, help, _strlen(help));
+	help = "Type 'help name' to find out more about the function 'name'.\n\n ";
+	write(STDOUT_FILENO, help, _strlen(help));
+	help = " alias: alias [name=['string']]\n cd: cd [-L|[-P [-e]] [-@]] ";
+	write(STDOUT_FILENO, help, _strlen(help));
+	help = "[dir]\nexit: exit [n]\n  env: env [option] [name=value] [command ";
+	write(STDOUT_FILENO, help, _strlen(help));
+	help = "[args]]\n  setenv: setenv [variable] [value]\n  unsetenv: ";
+	write(STDOUT_FILENO, help, _strlen(help));
+	help = "unsetenv [variable]\n";
 	write(STDOUT_FILENO, help, _strlen(help));
 }
 /**
@@ -23,23 +64,11 @@ void aux_help_gen(void)
  */
 void aux_help_exit(void)
 {
-	char *help = "_exit: exit [status]\n Exit shell program.\n";
+	char *help = "exit: exit [n]\n Exit shell.\n";
 
 	write(STDOUT_FILENO, help, _strlen(help));
-	help = "status arg is the int used to exit the program";
+	help = "Exits the shell with a status of N. If N is ommited, the exit";
 	write(STDOUT_FILENO, help, _strlen(help));
-	help = "exit value 0";
+	help = "statusis that of the last command executed";
 	write(STDOUT_FILENO, help, _strlen(help));
-	help = "No argument given";
-}
-/**
- * help_all - Displays all possible builtin shellby commands.
- */
-void aux_help_all(void)
-{
-	char *help = "Internal defined builtin commands for the shell.\n";
-
-
-	write(STDOUT_FILENO, help, _strlen(help));
-	help = "Type 'help' to see list.\nType 'help name' to find ";
 }
