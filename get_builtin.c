@@ -11,6 +11,8 @@ int (*get_builtin(char *cmd))(data_shell *)
 		{ "env", _env },
 		{ "exit", exit_shell },
 		{ "setenv", _setenv },
+		{ "unsetenv", _unsetenv },
+		{ "cd", cd_shell },
 		{ NULL, NULL }
 	};
 	int i;

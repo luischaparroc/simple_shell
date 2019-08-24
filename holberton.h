@@ -70,6 +70,9 @@ int cmp_chars(char str[], const char *delim);
 char *_strtok(char str[], const char *delim);
 int _isdigit(const char *s);
 
+/* aux_str3.c */
+void rev_string(char *s);
+
 /* shell_loop.c */
 void shell_loop(data_shell *datash);
 
@@ -97,7 +100,19 @@ int _env(data_shell *datash);
 
 /* env2.c */
 char *copy_info(char *name, char *value);
+void set_env(char *name, char *value, data_shell *datash);
 int _setenv(data_shell *datash);
+int _unsetenv(data_shell *datash);
+
+/* cd.c */
+void cd_dot(data_shell *datash);
+void cd_to(data_shell *datash);
+void cd_previous(data_shell *datash);
+void cd_to_home(data_shell *datash);
+void cd_env(data_shell *datash);
+
+/* cd_shell.c */
+int cd_shell(data_shell *datash);
 
 /* get_builtin */
 int (*get_builtin(char *cmd))(data_shell *datash);
@@ -111,7 +126,8 @@ char *aux_itoa(int n);
 int _atoi(char *s);
 
 /* aux_error1.c */
-char *error_get_cd(char **args);
+char *strcat_cd(data_shell *, char *, char *, char *);
+char *error_get_cd(data_shell *datash);
 char *error_not_found(data_shell *datash);
 char *error_exit_shell(data_shell *datash);
 

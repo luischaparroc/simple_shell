@@ -1,40 +1,94 @@
 #include "holberton.h"
 
 /**
- * error_get_cd - error message for cd command in get_cd
- * @args: type array of args that is passed to the command.
- * Return: Error
+ * strcat_cd - function that concatenates the message for cd error
+ *
+ * @datash: data relevant (directory)
+ * @msg: message to print
+ * @error: output message
+ * @ver_str: counter lines
+ * Return: error message
  */
-char *error_get_cd(char **args)
+char *strcat_cd(data_shell *datash, char *msg, char *error, char *ver_str)
 {
-	int count = 0;
-	int length;
-	char *error;
-	char *ver_str;
+	char *illegal_flag, *venv;
 
-	ver_str = aux_itoa(count);
-	if (ver_str == 0)
-		return (NULL);
+	_strcpy(error, datash->av[0]);
+	_strcat(error, ": ");
+	_strcat(error, ver_str);
+	_strcat(error, ": ");
+	_strcat(error, datash->args[0]);
+	_strcat(error, msg);
+	if (datash->args[1][0] == '-')
+	{
+		illegal_flag = malloc(3);
+		illegal_flag[0] = '-';
+		illegal_flag[1] = datash->args[1][1];
+		illegal_flag[2] = '\0';
+		_strcat(error, illegal_flag);
+		free(illegal_flag);
+	}
+	else
+	{
+		if (datash->args[1][0] == '$')
+		{
+			venv = _strdup(_getenv(datash->args[1] + 1, datash->_environ));
+			_strcat(error, venv);
+			free(venv);
+		}
+		else
+		{
+			_strcat(error, datash->args[1]);
+		}
+	}
+	_strcat(error, "\n");
+	_strcat(error, "\0");
+	return (error);
+}
 
-	if (args[0][0] == '-')
-		args[0][2] = '\0';
-	length = _strlen(prgname) + _strlen(ver_str) + _strlen(args[0]) + 20;
+/**
+ * error_get_cd - error message for cd command in get_cd
+ * @datash: data relevant (directory)
+ * Return: Error message
+ */
+char *error_get_cd(data_shell *datash)
+{
+	int length, len_id;
+	char *error, *ver_str, *msg;
+
+	ver_str = aux_itoa(datash->counter);
+	if (datash->args[1][0] == '-')
+	{
+		msg = ": Illegal option ";
+		len_id = 2;
+	}
+	else
+	{
+		msg = ": can't cd to ";
+		if (datash->args[1][0] == '$')
+		{
+			len_id = _strlen(_getenv(datash->args[1] + 1, datash->_environ));
+		}
+		else
+		{
+			len_id = _strlen(datash->args[1]);
+		}
+	}
+
+	length = _strlen(datash->av[0]) + _strlen(datash->args[0]);
+	length += _strlen(ver_str) + _strlen(msg) + len_id + 5;
 	error = malloc(sizeof(char) * (length + 1));
+
 	if (error == 0)
 	{
 		free(ver_str);
 		return (NULL);
 	}
-	_strcpy(error, prgname);
-	_strcat(error, ": ");
-	_strcat(error, ver_str);
-	if (args[0][0] == '-')
-		_strcat(error, ": cd: not found ");
-	else
-		_strcat(error, ": cd: not found ");
-	_strcat(error, args[0]);
-	_strcat(error, "\n");
+
+	error = strcat_cd(datash, msg, error, ver_str);
+
 	free(ver_str);
+
 	return (error);
 }
 

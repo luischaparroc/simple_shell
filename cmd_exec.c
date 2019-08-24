@@ -101,16 +101,11 @@ int cmd_exec(data_shell *datash)
 	{
 		dir = _which(datash->args[0], datash->_environ);
 		execve(dir, datash->args, NULL);
-		free(dir);
-		free(datash->input);
-		free(datash->args);
-		exit(EXIT_FAILURE);
 	}
 	else if (pd < 0)
 	{
-		free(datash->input);
-		free(datash->args);
 		perror(datash->av[0]);
+		return (1);
 	}
 	else
 	{
@@ -118,6 +113,8 @@ int cmd_exec(data_shell *datash)
 			wpd = waitpid(pd, &state, WUNTRACED);
 		} while (!WIFEXITED(state) && !WIFSIGNALED(state));
 	}
-	datash->status = 0;
+
+	datash->status = state / 256;
+
 	return (1);
 }
