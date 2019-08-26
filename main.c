@@ -16,6 +16,7 @@ void free_data(data_shell *datash)
 	}
 
 	free(datash->_environ);
+	free(datash->pid);
 }
 
 /**
@@ -33,7 +34,7 @@ void set_data(data_shell *datash, char **av)
 	datash->input = NULL;
 	datash->args = NULL;
 	datash->status = 0;
-	datash->counter = 0;
+	datash->counter = 1;
 
 	for (i = 0; environ[i]; i++)
 		;
@@ -46,6 +47,7 @@ void set_data(data_shell *datash, char **av)
 	}
 
 	datash->_environ[i] = NULL;
+	datash->pid = aux_itoa(getpid());
 }
 
 /**

@@ -38,7 +38,39 @@ typedef struct data
 	int status;
 	int counter;
 	char **_environ;
+	char *pid;
 } data_shell;
+
+/**
+ * struct sep_list_s - single linked list
+ * @separator: ; | &
+ * @next: next node
+ * Description: single linked list to store separators
+ */
+typedef struct sep_list_s
+{
+	char separator;
+	struct sep_list_s *next;
+} sep_list;
+
+/**
+ * struct line_list_s - single linked list
+ * @line: command line
+ * @next: next node
+ * Description: single linked list to store command lines
+ */
+typedef struct line_list_s
+{
+	char *line;
+	struct line_list_s *next;
+} line_list;
+
+typedef struct repvar_list_s
+{
+	char *var;
+	int len;
+	struct repvar_list_s *next;
+} repvar_list;
 
 /**
  * struct builtin_s - Builtin struct for command args.
@@ -50,6 +82,16 @@ typedef struct builtin_s
 	char *name;
 	int (*f)(data_shell *datash);
 } builtin_t;
+
+/* aux_lists.c */
+sep_list *add_sep_node_end(sep_list **head, char sep);
+void free_sep_list(sep_list **head);
+line_list *add_line_node_end(line_list **head, char *line);
+void free_line_list(line_list **head);
+
+/* aux_lists2.c */
+repvar_list *add_rvar_node_end(repvar_list **head, char *var);
+void free_rvar_list(repvar_list **head);
 
 /* aux_str functions */
 char *_strcat(char *dest, const char *src);
@@ -73,13 +115,24 @@ int _isdigit(const char *s);
 /* aux_str3.c */
 void rev_string(char *s);
 
+/* check_syntax_error.c */
+int repeated_char(char *input, int i);
+int error_sep_op(char *input, int i, char last);
+int first_char(char *input, int *i);
+void print_syntax_error(data_shell *datash, char *input, int i, int bool);
+int check_syntax_error(data_shell *datash, char *input);
+
 /* shell_loop.c */
+int is_a_comment(char *input);
 void shell_loop(data_shell *datash);
 
 /* read_line.c */
 char *read_line(void);
 
-/* split_line.c */
+/* split.c */
+char *swap_char(char *input, int bool);
+void add_nodes(sep_list **head_s, line_list **head_l, char *input);
+int split_commands(data_shell *datash, char *input);
 char **split_line(char *input);
 
 /* get_line.c */
@@ -144,7 +197,6 @@ int get_error(data_shell *datash, int eval);
 void get_sigint(int sig);
 
 /* aux_help.c */
-
 void aux_help_env(void);
 void aux_help_setenv(void);
 void aux_help_unsetenv(void);
@@ -152,13 +204,11 @@ void aux_help_general(void);
 void aux_help_exit(void);
 
 /* aux_help2.c */
-
 void aux_help(void);
 void aux_help_alias(void);
 void aux_help_cd(void);
 
 /* get_help.c */
 int get_help(data_shell *datash);
-
 
 #endif

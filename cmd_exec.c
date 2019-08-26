@@ -100,7 +100,7 @@ int cmd_exec(data_shell *datash)
 	if (pd == 0)
 	{
 		dir = _which(datash->args[0], datash->_environ);
-		execve(dir, datash->args, NULL);
+		execve(dir, datash->args, datash->_environ);
 	}
 	else if (pd < 0)
 	{
