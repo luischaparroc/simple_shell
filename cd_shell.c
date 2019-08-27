@@ -38,12 +38,6 @@ int cd_shell(data_shell *datash)
 		return (1);
 	}
 
-	if (dir[0] == '$' && dir[1] != '\0')
-	{
-		cd_env(datash);
-		return (1);
-	}
-
 	cd_to(datash);
 
 	return (1);

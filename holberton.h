@@ -29,6 +29,7 @@ char *prgname;
  * @status: last status of the shell
  * @counter: lines counter
  * @_environ: environment variable
+ * @pid: process ID of the shell
  */
 typedef struct data
 {
@@ -65,12 +66,21 @@ typedef struct line_list_s
 	struct line_list_s *next;
 } line_list;
 
-typedef struct repvar_list_s
+/**
+ * struct r_var_list - single linked list
+ * @len_var: length of the variable
+ * @val: value of the variable
+ * @len_val: length of the value
+ * @next: next node
+ * Description: single linked list to store variables
+ */
+typedef struct r_var_list
 {
-	char *var;
-	int len;
-	struct repvar_list_s *next;
-} repvar_list;
+	int len_var;
+	char *val;
+	int len_val;
+	struct r_var_list *next;
+} r_var;
 
 /**
  * struct builtin_s - Builtin struct for command args.
@@ -90,8 +100,8 @@ line_list *add_line_node_end(line_list **head, char *line);
 void free_line_list(line_list **head);
 
 /* aux_lists2.c */
-repvar_list *add_rvar_node_end(repvar_list **head, char *var);
-void free_rvar_list(repvar_list **head);
+r_var *add_rvar_node(r_var **head, int lvar, char *var, int lval);
+void free_rvar_list(r_var **head);
 
 /* aux_str functions */
 char *_strcat(char *dest, const char *src);
@@ -123,17 +133,24 @@ void print_syntax_error(data_shell *datash, char *input, int i, int bool);
 int check_syntax_error(data_shell *datash, char *input);
 
 /* shell_loop.c */
-int is_a_comment(char *input);
+char *without_comment(char *in);
 void shell_loop(data_shell *datash);
 
 /* read_line.c */
-char *read_line(void);
+char *read_line(int *i_eof);
 
 /* split.c */
 char *swap_char(char *input, int bool);
 void add_nodes(sep_list **head_s, line_list **head_l, char *input);
+void go_next(sep_list **list_s, line_list **list_l, data_shell *datash);
 int split_commands(data_shell *datash, char *input);
 char **split_line(char *input);
+
+/* rep_var.c */
+void check_env(r_var **h, char *in, data_shell *data);
+int check_vars(r_var **h, char *in, char *st, data_shell *data);
+char *replaced_input(r_var **head, char *input, char *new_input, int nlen);
+char *rep_var(char *input, data_shell *datash);
 
 /* get_line.c */
 void bring_line(char **lineptr, size_t *n, char *buffer, size_t j);
@@ -162,7 +179,6 @@ void cd_dot(data_shell *datash);
 void cd_to(data_shell *datash);
 void cd_previous(data_shell *datash);
 void cd_to_home(data_shell *datash);
-void cd_env(data_shell *datash);
 
 /* cd_shell.c */
 int cd_shell(data_shell *datash);

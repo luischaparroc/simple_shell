@@ -18,7 +18,7 @@ char *swap_char(char *input, int bool)
 			if (input[i] == '|')
 			{
 				if (input[i + 1] != '|')
-					input[i] = 27;
+					input[i] = 16;
 				else
 					i++;
 			}
@@ -36,7 +36,7 @@ char *swap_char(char *input, int bool)
 	{
 		for (i = 0; input[i]; i++)
 		{
-			input[i] = (input[i] == 27 ? '|' : input[i]);
+			input[i] = (input[i] == 16 ? '|' : input[i]);
 			input[i] = (input[i] == 12 ? '&' : input[i]);
 		}
 	}
@@ -80,6 +80,48 @@ void add_nodes(sep_list **head_s, line_list **head_l, char *input)
 }
 
 /**
+ * go_next - go to the next command line stored
+ *
+ * @list_s: separator list
+ * @list_l: command line list
+ * @datash: data structure
+ * Return: no return
+ */
+void go_next(sep_list **list_s, line_list **list_l, data_shell *datash)
+{
+	int loop_sep;
+	sep_list *ls_s;
+	line_list *ls_l;
+
+	loop_sep = 1;
+	ls_s = *list_s;
+	ls_l = *list_l;
+
+	while (ls_s != NULL && loop_sep)
+	{
+		if (datash->status == 0)
+		{
+			if (ls_s->separator == '&' || ls_s->separator == ';')
+				loop_sep = 0;
+			if (ls_s->separator == '|')
+				ls_l = ls_l->next, ls_s = ls_s->next;
+		}
+		else
+		{
+			if (ls_s->separator == '|' || ls_s->separator == ';')
+				loop_sep = 0;
+			if (ls_s->separator == '&')
+				ls_l = ls_l->next, ls_s = ls_s->next;
+		}
+		if (ls_s != NULL && !loop_sep)
+			ls_s = ls_s->next;
+	}
+
+	*list_s = ls_s;
+	*list_l = ls_l;
+}
+
+/**
  * split_commands - splits command lines according to
  * the separators ;, | and &, and executes them
  *
@@ -112,15 +154,10 @@ int split_commands(data_shell *datash, char *input)
 		if (loop == 0)
 			break;
 
-		if (list_s != NULL)
-		{
-			if (list_s->separator == '|' && datash->status == 0)
-				break;
-			if (list_s->separator == '&' && datash->status != 0)
-				break;
-			list_s = list_s->next;
-		}
-		list_l = list_l->next;
+		go_next(&list_s, &list_l, datash);
+
+		if (list_l != NULL)
+			list_l = list_l->next;
 	}
 
 	free_sep_list(&head_s);

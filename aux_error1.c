@@ -1,4 +1,3 @@
-
 #include "holberton.h"
 
 /**
@@ -12,7 +11,7 @@
  */
 char *strcat_cd(data_shell *datash, char *msg, char *error, char *ver_str)
 {
-	char *illegal_flag, *venv;
+	char *illegal_flag;
 
 	_strcpy(error, datash->av[0]);
 	_strcat(error, ": ");
@@ -31,17 +30,9 @@ char *strcat_cd(data_shell *datash, char *msg, char *error, char *ver_str)
 	}
 	else
 	{
-		if (datash->args[1][0] == '$')
-		{
-			venv = _strdup(_getenv(datash->args[1] + 1, datash->_environ));
-			_strcat(error, venv);
-			free(venv);
-		}
-		else
-		{
-			_strcat(error, datash->args[1]);
-		}
+		_strcat(error, datash->args[1]);
 	}
+
 	_strcat(error, "\n");
 	_strcat(error, "\0");
 	return (error);
@@ -66,14 +57,7 @@ char *error_get_cd(data_shell *datash)
 	else
 	{
 		msg = ": can't cd to ";
-		if (datash->args[1][0] == '$')
-		{
-			len_id = _strlen(_getenv(datash->args[1] + 1, datash->_environ));
-		}
-		else
-		{
-			len_id = _strlen(datash->args[1]);
-		}
+		len_id = _strlen(datash->args[1]);
 	}
 
 	length = _strlen(datash->av[0]) + _strlen(datash->args[0]);

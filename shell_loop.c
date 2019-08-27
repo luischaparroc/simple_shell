@@ -1,27 +1,38 @@
 #include "holberton.h"
 
 /**
- * is_a_comment - defines if an input string is a comment
+ * without_comment - deletes comments from the input
  *
- * @input: input string
- * Return: 1 if it is a comment, 0 it not
+ * @in: input string
+ * Return: input without comments
  */
-int is_a_comment(char *input)
+char *without_comment(char *in)
 {
-	int i;
+	int i, up_to;
 
-	for (i = 0; input[i]; i++)
+	up_to = 0;
+	for (i = 0; in[i]; i++)
 	{
-		if (input[i] == ' ' || input[i] == '\t')
-			continue;
+		if (in[i] == '#')
+		{
+			if (i == 0)
+			{
+				free(in);
+				return (NULL);
+			}
 
-		if (input[i] != '#')
-			return (0);
-
-		break;
+			if (in[i - 1] == ' ' || in[i - 1] == '\t' || in[i - 1] == ';')
+				up_to = i;
+		}
 	}
 
-	return (1);
+	if (up_to != 0)
+	{
+		in = _realloc(in, i, up_to + 1);
+		in[up_to] = '\0';
+	}
+
+	return (in);
 }
 
 /**
@@ -32,33 +43,28 @@ int is_a_comment(char *input)
  */
 void shell_loop(data_shell *datash)
 {
-	int loop;
-	char *input, *without_comnts;
+	int loop, i_eof;
+	char *input;
 
 	loop = 1;
 	while (loop == 1)
 	{
 		write(STDIN_FILENO, "^-^ ", 4);
-		input = read_line();
-
-		if (input[0] != '\0')
+		input = read_line(&i_eof);
+		if (i_eof != -1)
 		{
-			if (is_a_comment(input) == 1)
-			{
-				free(input);
+			input = without_comment(input);
+			if (input == NULL)
 				continue;
-			}
 
-			without_comnts = _strtok(input, "#");
-
-			if (check_syntax_error(datash, without_comnts) == 1)
+			if (check_syntax_error(datash, input) == 1)
 			{
 				datash->status = 2;
 				free(input);
 				continue;
 			}
-
-			loop = split_commands(datash, without_comnts);
+			input = rep_var(input, datash);
+			loop = split_commands(datash, input);
 			datash->counter += 1;
 			free(input);
 		}
