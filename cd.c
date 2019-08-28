@@ -101,7 +101,11 @@ void cd_previous(data_shell *datash)
 	cp_pwd = _strdup(pwd);
 
 	p_oldpwd = _getenv("OLDPWD", datash->_environ);
-	cp_oldpwd = _strdup(p_oldpwd);
+
+	if (p_oldpwd == NULL)
+		cp_oldpwd = cp_pwd;
+	else
+		cp_oldpwd = _strdup(p_oldpwd);
 
 	set_env("OLDPWD", cp_pwd, datash);
 
@@ -116,7 +120,8 @@ void cd_previous(data_shell *datash)
 	write(STDOUT_FILENO, "\n", 1);
 
 	free(cp_pwd);
-	free(cp_oldpwd);
+	if (p_oldpwd)
+		free(cp_oldpwd);
 
 	datash->status = 0;
 
@@ -134,16 +139,27 @@ void cd_to_home(data_shell *datash)
 	char *p_pwd, *home;
 	char pwd[PATH_MAX];
 
-	home = _getenv("HOME", datash->_environ);
-	set_env("PWD", home, datash);
-
 	getcwd(pwd, sizeof(pwd));
 	p_pwd = _strdup(pwd);
+
+	home = _getenv("HOME", datash->_environ);
+
+	if (home == NULL)
+	{
+		set_env("OLDPWD", p_pwd, datash);
+		free(p_pwd);
+		return;
+	}
+
+	if (chdir(home) == -1)
+	{
+		get_error(datash, 2);
+		free(p_pwd);
+		return;
+	}
+
 	set_env("OLDPWD", p_pwd, datash);
-
+	set_env("PWD", home, datash);
 	free(p_pwd);
-
 	datash->status = 0;
-
-	chdir(home);
 }
