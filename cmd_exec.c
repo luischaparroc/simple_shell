@@ -65,10 +65,10 @@ char *_which(char *cmd, char **_environ)
 			token_path = _strtok(NULL, ":");
 		}
 		free(ptr_path);
-	}
 
 	if (stat(cmd, &st) == 0)
 		return (cmd);
+	}
 
 	return (NULL);
 }
