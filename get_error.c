@@ -9,18 +9,11 @@
 int get_error(data_shell *datash, int eval)
 {
 	char *error;
-	char **args = NULL;
 
 	switch (eval)
 	{
 	case -1:
 		error = error_env(datash);
-		break;
-	case 1:
-		error = error_get_alias(args);
-		break;
-	case 126:
-		error = error_permission(args);
 		break;
 	case 127:
 		error = error_not_found(datash);

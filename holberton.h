@@ -19,7 +19,6 @@
 /* Points to an array of pointers to strings called the "environment" */
 extern char **environ;
 
-char *prgname;
 
 /**
  * struct data - struct that contains all relevant data on runtime
