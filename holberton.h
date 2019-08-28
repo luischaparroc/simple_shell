@@ -205,6 +205,8 @@ char *error_get_alias(char **args);
 char *error_env(data_shell *datash);
 char *error_syntax(char **args);
 char *error_permission(char **args);
+char *error_path_126(data_shell *datash);
+
 
 /* get_error.c */
 int get_error(data_shell *datash, int eval);

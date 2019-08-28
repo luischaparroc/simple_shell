@@ -37,6 +37,7 @@ char *_which(char *cmd, char **_environ)
 
 	if (cmd == NULL)
 		return (NULL);
+
 	path = _getenv("PATH", _environ);
 	if (path)
 	{
@@ -91,8 +92,7 @@ int check_error_cmd(char *dir, data_shell *datash)
 	{
 		if (access(dir, X_OK) == -1)
 		{
-			write(2, "Error\n", 6);
-			datash->status = 126;
+			get_error(datash, 126);
 			free(dir);
 			return (1);
 		}
@@ -102,8 +102,7 @@ int check_error_cmd(char *dir, data_shell *datash)
 	{
 		if (access(datash->args[0], X_OK) == -1)
 		{
-			write(2, "Error\n", 6);
-			datash->status = 126;
+			get_error(datash, 126);
 			return (1);
 		}
 	}
