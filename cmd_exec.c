@@ -35,9 +35,6 @@ char *_which(char *cmd, char **_environ)
 	int len_dir, len_cmd, i;
 	struct stat st;
 
-	if (cmd == NULL)
-		return (NULL);
-
 	path = _getenv("PATH", _environ);
 	if (path)
 	{
@@ -65,11 +62,13 @@ char *_which(char *cmd, char **_environ)
 			token_path = _strtok(NULL, ":");
 		}
 		free(ptr_path);
-
-	if (stat(cmd, &st) == 0)
-		return (cmd);
+		if (stat(cmd, &st) == 0)
+			return (cmd);
+		return (NULL);
 	}
-
+	if (cmd[0] == '/')
+		if (stat(cmd, &st) == 0)
+			return (cmd);
 	return (NULL);
 }
 
