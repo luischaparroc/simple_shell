@@ -37,39 +37,78 @@ char *_which(char *cmd, char **_environ)
 
 	if (cmd == NULL)
 		return (NULL);
-
 	path = _getenv("PATH", _environ);
-	ptr_path = _strdup(path);
-	len_cmd = _strlen(cmd);
-	token_path = _strtok(ptr_path, ":");
-	i = 0;
-	while (token_path != NULL)
+	if (path)
 	{
-		if (is_cdir(path, &i))
-			if (stat(cmd, &st) == 0)
-				return (cmd);
-
-		len_dir = _strlen(token_path);
-		dir = malloc(len_dir + len_cmd + 2);
-		_strcpy(dir, token_path);
-		_strcat(dir, "/");
-		_strcat(dir, cmd);
-		_strcat(dir, "\0");
-
-		if (stat(dir, &st) == 0)
+		ptr_path = _strdup(path);
+		len_cmd = _strlen(cmd);
+		token_path = _strtok(ptr_path, ":");
+		i = 0;
+		while (token_path != NULL)
 		{
-			free(ptr_path);
-			return (dir);
+			if (is_cdir(path, &i))
+				if (stat(cmd, &st) == 0)
+					return (cmd);
+			len_dir = _strlen(token_path);
+			dir = malloc(len_dir + len_cmd + 2);
+			_strcpy(dir, token_path);
+			_strcat(dir, "/");
+			_strcat(dir, cmd);
+			_strcat(dir, "\0");
+			if (stat(dir, &st) == 0)
+			{
+				free(ptr_path);
+				return (dir);
+			}
+			free(dir);
+			token_path = _strtok(NULL, ":");
 		}
-		free(dir);
-		token_path = _strtok(NULL, ":");
+		free(ptr_path);
 	}
-	free(ptr_path);
 
 	if (stat(cmd, &st) == 0)
 		return (cmd);
 
 	return (NULL);
+}
+
+/**
+ * check_error_cmd - verifies if user has permissions to access
+ *
+ * @dir: destination directory
+ * @datash: data structure
+ * Return: 1 if there is an error, 0 if not
+ */
+int check_error_cmd(char *dir, data_shell *datash)
+{
+	if (dir == NULL)
+	{
+		get_error(datash, 127);
+		return (1);
+	}
+
+	if (_strcmp(datash->args[0], dir) != 0)
+	{
+		if (access(dir, X_OK) == -1)
+		{
+			write(2, "Error\n", 6);
+			datash->status = 126;
+			free(dir);
+			return (1);
+		}
+		free(dir);
+	}
+	else
+	{
+		if (access(datash->args[0], X_OK) == -1)
+		{
+			write(2, "Error\n", 6);
+			datash->status = 126;
+			return (1);
+		}
+	}
+
+	return (0);
 }
 
 /**
@@ -87,14 +126,10 @@ int cmd_exec(data_shell *datash)
 	(void) wpd;
 
 	dir = _which(datash->args[0], datash->_environ);
-	if (dir == NULL)
-	{
-		get_error(datash, 127);
-		return (1);
-	}
 
-	if (_strcmp(datash->args[0], dir) != 0)
-		free(dir);
+	if (check_error_cmd(dir, datash) == 1)
+		return (1);
+
 	pd = fork();
 
 	if (pd == 0)
