@@ -108,14 +108,11 @@ int is_executable(data_shell *datash)
 			break;
 	}
 	if (i == 0)
-		return (i);
+		return (0);
+
 	if (stat(input + i, &st) == 0)
 	{
-		if (access(input + i, F_OK) == -1)
-		{
-			get_error(datash, 126);
-			return (-1);
-		}
+		return (i);
 	}
 	get_error(datash, 127);
 	return (-1);
